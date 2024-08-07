@@ -1,9 +1,9 @@
+@import '@fontsource/poppins';
+@import '@fontsource/playfair-display';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@import '@fontsource/poppins';
-@import '@fontsource/playfair-display';
 
 :root {
   --background: 350 30% 98%;

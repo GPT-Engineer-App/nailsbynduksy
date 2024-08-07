@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, Instagram, Facebook, Mail, TikTok, Star, ChevronDown, ChevronUp } from "lucide-react";
+import { Sparkles, Instagram, Facebook, Mail, Star, ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
@@ -218,9 +218,6 @@ const Index = () => {
               </a>
               <a href="https://facebook.com/nailsbynduksy" target="_blank" rel="noopener noreferrer">
                 <Facebook size={32} className="text-primary hover:text-accent transition-colors" />
-              </a>
-              <a href="https://tiktok.com/@nailsbynduksy" target="_blank" rel="noopener noreferrer">
-                <TikTok size={32} className="text-primary hover:text-accent transition-colors" />
               </a>
               <a href="mailto:info@nailsbynduksy.com">
                 <Mail size={32} className="text-primary hover:text-accent transition-colors" />
