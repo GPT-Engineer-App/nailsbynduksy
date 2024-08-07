@@ -1,8 +1,9 @@
-import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, Instagram, Facebook, Mail, Star, ChevronDown, ChevronUp } from "lucide-react";
+import { motion, AnimatePresence, useAnimation } from "framer-motion";
+import { Sparkles, Instagram, Facebook, Mail, Star, ChevronDown, ChevronUp, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useInView } from "react-intersection-observer";
 import axios from 'axios';
 
 const fetchContent = async () => {
@@ -19,10 +20,10 @@ const fetchContent = async () => {
           content: "Nduksy is a passionate nail artist with over a decade of experience in creating stunning, custom nail designs. Her journey began in a small salon and has led her to become one of the most sought-after nail artists in the city. Nduksy's philosophy is simple: every client deserves to feel confident and beautiful, starting from their fingertips. Her attention to detail, creative flair, and commitment to using only the highest quality products make every set of nails a unique work of art.",
         },
         services: [
-          { name: "Manicure", price: "$30", description: "Classic manicure with your choice of polish" },
-          { name: "Pedicure", price: "$40", description: "Relaxing pedicure with exfoliation and massage" },
-          { name: "Gel Nails", price: "$50", description: "Long-lasting gel nails in any color or design" },
-          { name: "Nail Art", price: "From $10", description: "Custom nail art designs to express your style" },
+          { name: "Manicure", price: "KSh 3000", description: "Classic manicure with your choice of polish" },
+          { name: "Gel Nails", price: "KSh 5000", description: "Long-lasting gel nails in any color or design" },
+          { name: "Nail Art", price: "From KSh 1000", description: "Custom nail art designs to express your style" },
+          { name: "Nail Extensions", price: "KSh 7000", description: "Beautiful nail extensions for added length and strength" },
         ],
         gallery: [
           { category: "Manicure", images: [1, 2, 3] },
@@ -48,14 +49,26 @@ const fetchContent = async () => {
 const Index = () => {
   const [activeCategory, setActiveCategory] = useState("Manicure");
   const [expandedFaq, setExpandedFaq] = useState(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['content'],
     queryFn: fetchContent,
   });
 
+  const controls = useAnimation();
+  const [ref, inView] = useInView();
+
+  useEffect(() => {
+    if (inView) {
+      controls.start('visible');
+    }
+  }, [controls, inView]);
+
   if (isLoading) return <div className="flex justify-center items-center h-screen">Loading...</div>;
   if (error) return <div className="flex justify-center items-center h-screen">Error: {error.message}</div>;
+
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   return (
     <div className="min-h-screen bg-background">
@@ -69,7 +82,7 @@ const Index = () => {
           >
             NailsByNduksy
           </motion.h1>
-          <nav>
+          <nav className="hidden md:block">
             <ul className="flex space-x-4">
               <li><a href="#services" className="hover:text-accent transition-colors">Services</a></li>
               <li><a href="#gallery" className="hover:text-accent transition-colors">Gallery</a></li>
@@ -77,8 +90,27 @@ const Index = () => {
               <li><a href="#contact" className="hover:text-accent transition-colors">Contact</a></li>
             </ul>
           </nav>
+          <button className="md:hidden" onClick={toggleMenu}>
+            <Menu className="h-6 w-6" />
+          </button>
         </div>
       </header>
+
+      {isMenuOpen && (
+        <motion.nav 
+          className="fixed inset-0 bg-primary z-40 flex items-center justify-center"
+          initial={{ opacity: 0, y: -50 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -50 }}
+        >
+          <ul className="text-center">
+            <li className="my-4"><a href="#services" className="text-2xl hover:text-accent transition-colors" onClick={toggleMenu}>Services</a></li>
+            <li className="my-4"><a href="#gallery" className="text-2xl hover:text-accent transition-colors" onClick={toggleMenu}>Gallery</a></li>
+            <li className="my-4"><a href="#about" className="text-2xl hover:text-accent transition-colors" onClick={toggleMenu}>About</a></li>
+            <li className="my-4"><a href="#contact" className="text-2xl hover:text-accent transition-colors" onClick={toggleMenu}>Contact</a></li>
+          </ul>
+        </motion.nav>
+      )}
 
       <main>
         <section className="py-20 bg-[url('https://images.unsplash.com/photo-1604654894610-df63bc536371')] bg-cover bg-center">
@@ -100,14 +132,30 @@ const Index = () => {
 
         <section id="services" className="py-20 bg-secondary">
           <div className="container mx-auto px-4">
-            <h2 className="text-4xl md:text-5xl font-bold mb-10 text-center text-primary">Our Services</h2>
+            <motion.h2 
+              className="text-4xl md:text-5xl font-bold mb-10 text-center text-primary"
+              ref={ref}
+              initial="hidden"
+              animate={controls}
+              variants={{
+                visible: { opacity: 1, y: 0 },
+                hidden: { opacity: 0, y: 50 }
+              }}
+              transition={{ duration: 0.5 }}
+            >
+              Our Services
+            </motion.h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {data.services.map((service, index) => (
                 <motion.div 
                   key={index}
                   className="bg-card p-6 rounded-lg shadow-lg"
                   initial={{ opacity: 0, y: 50 }}
-                  animate={{ opacity: 1, y: 0 }}
+                  animate={controls}
+                  variants={{
+                    visible: { opacity: 1, y: 0 },
+                    hidden: { opacity: 0, y: 50 }
+                  }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                 >
                   <h3 className="text-2xl font-bold mb-2">{service.name}</h3>

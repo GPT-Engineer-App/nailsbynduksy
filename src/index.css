@@ -3,6 +3,8 @@
 @import '@fontsource/poppins/700.css';
 @import '@fontsource/cormorant-garamond/400.css';
 @import '@fontsource/cormorant-garamond/700.css';
+@import '@fontsource/dancing-script/400.css';
+@import '@fontsource/dancing-script/700.css';
 
 @tailwind base;
 @tailwind components;
@@ -18,16 +20,16 @@
   --popover: 350 30% 98%;
   --popover-foreground: 350 50% 10%;
 
-  --primary: 350 80% 60%;
+  --primary: 350 60% 55%;
   --primary-foreground: 350 10% 98%;
 
-  --secondary: 25 30% 95%;
+  --secondary: 25 30% 97%;
   --secondary-foreground: 350 50% 15%;
 
-  --muted: 350 20% 95%;
+  --muted: 350 20% 96%;
   --muted-foreground: 350 50% 40%;
 
-  --accent: 25 70% 90%;
+  --accent: 25 70% 94%;
   --accent-foreground: 350 50% 15%;
 
   --destructive: 0 85% 60%;
@@ -49,7 +51,7 @@
     font-family: 'Poppins', sans-serif;
   }
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Dancing Script', cursive;
   }
 }
 
